@@ -1,0 +1,1002 @@
+definitions:
+  deliverymodels.AddProductInputs:
+    properties:
+      branid:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  deliverymodels.AddProductsDeatils:
+    properties:
+      price:
+        type: number
+      productid:
+        type: integer
+      quantity:
+        type: integer
+      sizeid:
+        type: integer
+    required:
+    - quantity
+    type: object
+  deliverymodels.Address:
+    properties:
+      city:
+        type: string
+      houseNo:
+        type: string
+      postalCode:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+    required:
+    - city
+    - houseNo
+    - postalCode
+    - state
+    - street
+    type: object
+  deliverymodels.AdminSignupInputs:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phonenumber:
+        type: string
+    type: object
+  deliverymodels.AdmionLoginInputs:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  deliverymodels.Coupon:
+    properties:
+      couponCode:
+        type: string
+      discount:
+        type: integer
+      expirDate:
+        type: string
+      maximumdiscount:
+        type: integer
+    type: object
+  deliverymodels.UpdateProductInput:
+    properties:
+      branid:
+        type: integer
+      description:
+        type: string
+      name:
+        description: AdminId     uint   `json:"adminid" `
+        type: string
+      productid:
+        type: integer
+    required:
+    - description
+    - name
+    type: object
+  deliverymodels.UpdateProductsDeatils:
+    properties:
+      price:
+        type: number
+      productId:
+        description: AdminId       uint `json:"adminId" `
+        type: integer
+      productItemId:
+        type: integer
+      quantity:
+        type: integer
+      sizeid:
+        type: integer
+    required:
+    - quantity
+    type: object
+  deliverymodels.UpdateUser:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+      phonenumber:
+        type: string
+      username:
+        type: string
+    type: object
+  deliverymodels.User:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+      phonenumber:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - firstname
+    - lastname
+    - password
+    - phonenumber
+    - username
+    type: object
+  deliverymodels.UserLoginInputs:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  deliverymodels.ViewCartDetail:
+    properties:
+      brand:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      size:
+        type: string
+    type: object
+  deliverymodels.ViewInvoiceForUsers:
+    properties:
+      PaymentStatus:
+        type: string
+      billAmount:
+        type: number
+      discount:
+        type: number
+      from_wallet:
+        type: number
+      name:
+        type: string
+      orderID:
+        type: integer
+      total_amount:
+        type: number
+    type: object
+  deliverymodels.ViewOrdersForUsers:
+    properties:
+      orderID:
+        type: integer
+      price:
+        type: number
+      product:
+        type: string
+      quantity:
+        type: integer
+      status:
+        type: string
+    type: object
+  deliverymodels.ViewProductDetail:
+    properties:
+      brand:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      sizes:
+        items:
+          type: string
+        type: array
+    type: object
+  deliverymodels.ViewUserProfile:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phoneNumber:
+        type: string
+      username:
+        type: string
+    type: object
+  entity.UserLoginWithOtp:
+    properties:
+      key:
+        type: string
+      otp:
+        type: string
+      password:
+        type: string
+      phonenumber:
+        type: string
+      resendOtp:
+        type: boolean
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Testing Swagger APIs.
+  termsOfService: http://swagger.io/terms/
+  title: 70_Off
+  version: "1.0"
+paths:
+  /adminLogin:
+    post:
+      consumes:
+      - application/json
+      description: Admin Can Login With UserName And Password
+      parameters:
+      - description: Admin Data
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.AdmionLoginInputs'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Admin Login
+      tags:
+      - Admin
+  /adminSignup:
+    post:
+      consumes:
+      - application/json
+      description: Add new Admin
+      parameters:
+      - description: User Data
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.AdminSignupInputs'
+      produces:
+      - application/json
+      responses: {}
+      summary: Admin SignUp
+      tags:
+      - Admin
+  /resetPassword:
+    put:
+      consumes:
+      - application/json
+      description: User PhoneNumber Verification For Reset Password
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserLoginWithOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Phone Number Verification
+      tags:
+      - user
+  /resetPasswordRequst:
+    get:
+      consumes:
+      - application/json
+      description: Reset Password Using OTP Verification
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserLoginWithOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Reset Password - OTP
+      tags:
+      - user
+  /userLogin:
+    post:
+      consumes:
+      - application/json
+      description: User Can Login With UserName And Password
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.UserLoginInputs'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.UserLoginInputs'
+      summary: User Can Login
+      tags:
+      - user
+  /userLoginWithOtp:
+    post:
+      consumes:
+      - application/json
+      description: User Can Login with OTP Without Password
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserLoginWithOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.UserLoginWithOtp'
+      summary: User Login With OTP
+      tags:
+      - user
+  /userLoginWithOtpValidation:
+    post:
+      consumes:
+      - application/json
+      description: User Login  Verification through OTP
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserLoginWithOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.UserLoginWithOtp'
+      summary: User Phone Number Verification
+      tags:
+      - user
+  /userSignup:
+    post:
+      consumes:
+      - application/json
+      description: Add new user
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.User'
+      summary: User SignUp
+      tags:
+      - user
+  /userSignupVerification:
+    post:
+      consumes:
+      - application/json
+      description: User SignUp Phone Number Verification through OTP
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserLoginWithOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.UserLoginWithOtp'
+      summary: User Phone Number Verification
+      tags:
+      - user
+  /v1/CheckOutCartProcess/{paymentTypeID}/{addressID}/{coupon}:
+    post:
+      description: User Can Choose Address and Payment
+      parameters:
+      - description: coupon
+        in: query
+        name: coupon
+        type: string
+      - description: Wallet
+        in: query
+        name: wallet
+        type: string
+      - description: Payment(required)
+        in: path
+        name: paymentTypeID
+        required: true
+        type: string
+      - description: Address(required)
+        in: path
+        name: addressID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            items:
+              $ref: '#/definitions/deliverymodels.ViewOrdersForUsers'
+            type: array
+      summary: Order Confirmation
+      tags:
+      - user
+  /v1/addAddress:
+    post:
+      consumes:
+      - application/json
+      description: User Can Add Address After SignUp
+      parameters:
+      - description: User Data (required)
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.Address'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.Address'
+      summary: Add Address For User
+      tags:
+      - user
+  /v1/addCart/{productID}/{quantity}/{sizeID}:
+    post:
+      description: User Can Add Product to Cart
+      parameters:
+      - description: ProductID(required)
+        in: path
+        name: productID
+        required: true
+        type: string
+      - description: quantity(required)
+        in: path
+        name: quantity
+        required: true
+        type: string
+      - description: sizeID(required)
+        in: path
+        name: sizeID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Add Cart Items
+      tags:
+      - user
+  /v1/admin/addCoupon:
+    post:
+      description: Add Coupon
+      parameters:
+      - description: Coupon Data
+        in: body
+        name: coupon
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.Coupon'
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Add Coupon
+      tags:
+      - Admin
+  /v1/admin/addProduct:
+    post:
+      consumes:
+      - application/json
+      description: Admin Can Add Product
+      parameters:
+      - description: Product Data
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.AddProductInputs'
+      produces:
+      - application/json
+      responses: {}
+      summary: Add Product
+      tags:
+      - Admin
+  /v1/admin/addProductDetails:
+    post:
+      consumes:
+      - application/json
+      description: Admin Can Add Product Details
+      parameters:
+      - description: Product Data
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.AddProductsDeatils'
+      produces:
+      - application/json
+      responses: {}
+      summary: Add Product Details
+      tags:
+      - Admin
+  /v1/admin/adminLogOut:
+    post:
+      description: Admin Logout,
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Logout
+      tags:
+      - Admin
+  /v1/admin/delete/{productId}:
+    put:
+      consumes:
+      - application/json
+      description: Product Soft Delete
+      parameters:
+      - description: 'ProductID '
+        in: path
+        name: productID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Soft Delete
+      tags:
+      - Admin
+  /v1/admin/saleReport/{days}:
+    get:
+      consumes:
+      - application/json
+      description: It shows weekly,monthly,yearly and last n days order report
+      parameters:
+      - description: Days
+        in: path
+        name: days
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Order Report
+      tags:
+      - Admin
+  /v1/admin/updateProduct:
+    put:
+      consumes:
+      - application/json
+      description: Admin Can Edit Product
+      parameters:
+      - description: Product Data
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.UpdateProductInput'
+      produces:
+      - application/json
+      responses: {}
+      summary: Edit Product
+      tags:
+      - Admin
+  /v1/admin/updateProductDetails:
+    put:
+      consumes:
+      - application/json
+      description: Admin Can Edit Product Details
+      parameters:
+      - description: Product Details
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.UpdateProductsDeatils'
+      produces:
+      - application/json
+      responses: {}
+      summary: Edit Product Details
+      tags:
+      - Admin
+  /v1/admin/updatingDeliveryStatus/{orderItemID}:
+    put:
+      consumes:
+      - application/json
+      description: Admin Can Updates Delivery Status for Orders
+      parameters:
+      - description: OrderItemID
+        in: path
+        name: orderItemID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Updating Delivery Order By Admin
+      tags:
+      - Admin
+  /v1/admin/updatingReturnStatus/{orderItemID}:
+    put:
+      consumes:
+      - application/json
+      description: Admin Can Updates Return Status for Orders
+      parameters:
+      - description: OrderItemID
+        in: path
+        name: orderItemID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Updating Return Status ByAdmin
+      tags:
+      - Admin
+  /v1/admin/userBlockToggle/{userID}:
+    put:
+      consumes:
+      - application/json
+      description: Admin Can Block or Unblock User
+      parameters:
+      - description: 'UserID '
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: User BLock Toggle
+      tags:
+      - Admin
+  /v1/cancelOrderByUser/{orderID}:
+    put:
+      description: User Can Cancel Order Using ID,
+      parameters:
+      - description: orderID
+        in: path
+        name: orderID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Cancel  Order By User
+      tags:
+      - user
+  /v1/diplayCart:
+    get:
+      description: Display Products in Cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewCartDetail'
+      summary: Display User Cart
+      tags:
+      - user
+  /v1/filterByBrand/{brandID}:
+    get:
+      description: Filter Product By Brand,
+      parameters:
+      - description: BrandID
+        in: path
+        name: brandID
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewProductDetail'
+      summary: Filter Product
+      tags:
+      - user
+  /v1/logOut:
+    post:
+      description: User Logout,
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Logout
+      tags:
+      - user
+  /v1/orderHistory:
+    get:
+      description: order history,
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewOrdersForUsers'
+      summary: order history
+      tags:
+      - user
+  /v1/orderProduct:
+    get:
+      description: User Can CheckOut Products From Cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewCartDetail'
+      summary: Check Out Cart
+      tags:
+      - user
+  /v1/productDetail/{productID}:
+    get:
+      description: User Can View Product Details,
+      parameters:
+      - description: ProductID
+        in: path
+        name: productID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Product Details
+      tags:
+      - user
+  /v1/productsPagination:
+    get:
+      description: List Products with Pagination
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewProductDetail'
+      summary: List Products Pagination
+      tags:
+      - user
+  /v1/razorpayVerification/{sign}/{razorid}/{payid}:
+    post:
+      description: User Can Pay Through RazorPay
+      parameters:
+      - description: Sign(required)
+        in: path
+        name: sign
+        required: true
+        type: string
+      - description: Razorid(required)
+        in: path
+        name: razorid
+        required: true
+        type: string
+      - description: Payid(required)
+        in: path
+        name: payid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewInvoiceForUsers'
+      summary: Razor Pay
+      tags:
+      - user
+  /v1/removeCartItem/{productItemID}/{quantity}:
+    put:
+      description: User Can Remove Product From Cart
+      parameters:
+      - description: ProductID(required)
+        in: path
+        name: productItemID
+        required: true
+        type: string
+      - description: quantity(required)
+        in: path
+        name: quantity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Remove Products From Cart
+      tags:
+      - user
+  /v1/returnOrderByUser/{orderID}:
+    put:
+      description: User Can Return Order Using ID,
+      parameters:
+      - description: OrderID
+        in: path
+        name: orderID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Return  Order By User
+      tags:
+      - user
+  /v1/searchByName/{search}:
+    get:
+      description: Search Product By Name,
+      parameters:
+      - description: Search
+        in: path
+        name: search
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewProductDetail'
+      summary: Search Product
+      tags:
+      - user
+  /v1/updateUserDetails:
+    put:
+      consumes:
+      - application/json
+      description: User Can Updated User Profile Details
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/deliverymodels.UpdateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: User Profile Updates
+      tags:
+      - user
+  /v1/userProfile:
+    get:
+      description: To Display User Details And Address,
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/deliverymodels.ViewUserProfile'
+      summary: User Profile
+      tags:
+      - user
+  /v1/walletBalance:
+    get:
+      description: User Can Check Wallet Balance,
+      responses:
+        "200":
+          description: Success Message
+          schema:
+            type: string
+      summary: Wallet Balance
+      tags:
+      - user
+securityDefinitions:
+  JWT:
+    in: header
+    name: token
+    type: apiKey
+swagger: "2.0"
