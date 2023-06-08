@@ -1014,7 +1014,7 @@ func (uc *UserController) UserProfile(c *gin.Context) {
 //	@Success		200	{string}	string	"Success Message"
 //	@Router			/v1/logOut [post]
 func (uc *UserController) LogoutHandler(c *gin.Context) {
-	c.SetCookie("token", "", -1, "/", "localhost", false, true)
+	c.SetCookie("token", "", -1, "/", "70off.online", true, true)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
