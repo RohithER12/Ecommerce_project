@@ -8,6 +8,7 @@ import (
 	"70_Off/domain/repositoryImpl"
 	"70_Off/domain/services"
 	"70_Off/infrastructure"
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -15,20 +16,20 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-//	@title						70_Off
-//	@version					1.0
-//	@description				Testing Swagger APIs.
-//	@termsOfService				http://swagger.io/terms/
-//	@contact.name				API Support
-//	@contact.url				http://www.swagger.io/support
-//	@contact.email				support@swagger.io
-//	@securityDefinitions.apiKey	JWT
-//	@in							header
-//	@name						token
-//	@license.name				Apache 2.0
-//	@license.url				http://www.apache.org/licenses/LICENSE-2.0.html
-//	@host						localhost:8080
-//	@BasePath					/api/v1
+// @title						70_Off
+// @version					1.0
+// @description				Testing Swagger APIs.
+// @termsOfService				http://swagger.io/terms/
+// @contact.name				API Support
+// @contact.url				http://www.swagger.io/support
+// @contact.email				support@swagger.io
+// @securityDefinitions.apiKey	JWT
+// @in							header
+// @name						token
+// @license.name				Apache 2.0
+// @license.url				http://www.apache.org/licenses/LICENSE-2.0.html
+// @host						localhost:8088
+// @BasePath					/api/v1
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -39,6 +40,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating database connection:", err)
 	}
+	fmt.Println("---")
 
 	userRepo := repositoryImpl.NewUserRepositoryImpl(db)
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(db)
