@@ -30,7 +30,7 @@ func UserRouter(router *gin.Engine, userController *controllers.UserController, 
 
 	v1.POST("/addAddress", userController.AddAddress)
 	v1.PUT("/updateUserDetails", userController.UserUpdates)
-	v1.POST("/addCart/:productID/:quantity/:sizeID", userController.AddCartItem)
+	v1.POST("/addCart/:product/:quantity/:sizeID", userController.AddCartItem)
 	v1.GET("/diplayCart", userController.DisplayCart)
 	v1.PUT("/removeCartItem/:productItemID/:quantity", userController.RemoveCartItem)
 	v1.GET("/orderProduct", userController.CheckOutCart)

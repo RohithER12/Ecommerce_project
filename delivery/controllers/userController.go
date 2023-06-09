@@ -249,7 +249,7 @@ func (uc *UserController) AddAddress(c *gin.Context) {
 //	@param			sizeID		path		string	true	"sizeID(required)"
 //
 //	@Success		200			{string}	string	"Success Message"
-//	@Router			/v1/addCart/{productID}/{quantity}/{sizeID} [post]
+//	@Router			/v1/addCart/{product}/{quantity}/{sizeID} [post]
 func (uc *UserController) AddCartItem(c *gin.Context) {
 
 	userIDCookie, err := c.Cookie("userID")
@@ -264,7 +264,7 @@ func (uc *UserController) AddCartItem(c *gin.Context) {
 		return
 	}
 
-	productSlug := c.Param("productID")
+	productSlug := c.Param("product")
 
 	// productID, err := strconv.Atoi(c.Param("productID"))
 	// if err != nil {

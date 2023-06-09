@@ -399,7 +399,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/addCart/{productID}/{quantity}/{sizeID}": {
+        "/v1/addCart/{product}/{quantity}/{sizeID}": {
             "post": {
                 "description": "User Can Add Product to Cart",
                 "tags": [

@@ -279,7 +279,7 @@ func (s *userService) AddItemToCart(productSlug string, userId, quantity, sizeId
 	if err != nil {
 		return err
 	}
-
+	fmt.Println("\nProductGetBySlug\n", product)
 	productDetails, err := s.productRepo.ProductItemGetByProductIdAndSizeId(product.ID, sizeId)
 	if err != nil {
 		return err
