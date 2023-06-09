@@ -387,6 +387,10 @@ func (s *userService) CheckOutCartProcess(userId uint) (*[]deliverymodels.ViewCa
 	if err != nil {
 		return nil, nil, 0, 0, nil, err
 	}
+	for _, cartItem := range cartItems {
+		fmt.Println("\ncartitems\n", cartItem)
+
+	}
 
 	totalAmount := cart.TotalCartAmount
 
