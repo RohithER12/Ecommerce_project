@@ -75,7 +75,7 @@ func (ac *AdminController) AdminLogin(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("token", token, 3600, "/", "70off.online", true, true)
+	c.SetCookie("token", token, 3600, "/", "70off.online", true, false)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Login successfully"})
 
