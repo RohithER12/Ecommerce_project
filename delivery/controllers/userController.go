@@ -322,6 +322,7 @@ func (uc *UserController) DisplayCart(c *gin.Context) {
 	for _, a := range *cartItems {
 		fmt.Println("\ncartitems\n", a)
 	}
+	fmt.Println(cartItems)
 
 	response := gin.H{
 		"message":     "Cart",
