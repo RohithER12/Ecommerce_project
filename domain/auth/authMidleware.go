@@ -33,8 +33,8 @@ func AuthMiddleware(secretKey string) gin.HandlerFunc {
 		userIDString := strconv.Itoa(int(claims.UserID))
 		adminIDString := strconv.Itoa(int(claims.AdminID))
 
-		c.SetCookie("userID", userIDString, 3600, "/", "70off.online", true, true)
-		c.SetCookie("adminID", adminIDString, 3600, "/", "70off.online", true, true)
+		c.SetCookie("userID", userIDString, 3600, "/", "70off.online", true, false)
+		c.SetCookie("adminID", adminIDString, 3600, "/", "70off.online", true, false)
 
 		c.Next()
 	}
