@@ -29,6 +29,7 @@ type UserService interface {
 	RemoveCartItem(userId, productItemId, quantity uint) error
 	CheckOutCartProcess(userId uint) (*[]deliverymodels.ViewCartDetail, *[]deliverymodels.ViewAddressForUser,
 		float64, float64, *[]deliverymodels.Coupon, error)
+	DisplayCart(userId uint) (*[]deliverymodels.ViewCartDetail, float64, error)
 	ExecutePurchaseRazorPay(cartId, addressId uint) (string, uint, error)
 	ExecuteRazorPaymentVerification(Signature, razorId, paymentId string) error
 	CheckOutCart(addressId, userId, paymentTypeID uint, coupon string, walleAmt float64) (*[]deliverymodels.ViewOrdersForUsers,
@@ -375,6 +376,20 @@ func (s *userService) UpdateUser(user *entity.User) error {
 	}
 	return nil
 }
+func (s *userService) DisplayCart(userId uint) (*[]deliverymodels.ViewCartDetail, float64, error) {
+	cart, err := s.cartRepo.FindCartByUserID(userId)
+	if err != nil {
+		return nil, 0, err
+	}
+	cartItems, err := s.cartItemRepo.FindAllCartItemsByCartIDForUser(cart.ID)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	totalAmount := cart.TotalCartAmount
+
+	return &cartItems, totalAmount, nil
+}
 
 func (s *userService) CheckOutCartProcess(userId uint) (*[]deliverymodels.ViewCartDetail,
 	*[]deliverymodels.ViewAddressForUser, float64, float64, *[]deliverymodels.Coupon, error) {
@@ -386,10 +401,6 @@ func (s *userService) CheckOutCartProcess(userId uint) (*[]deliverymodels.ViewCa
 	cartItems, err := s.cartItemRepo.FindAllCartItemsByCartIDForUser(cart.ID)
 	if err != nil {
 		return nil, nil, 0, 0, nil, err
-	}
-	for _, cartItem := range cartItems {
-		fmt.Println("\ncartitems\n", cartItem)
-
 	}
 
 	totalAmount := cart.TotalCartAmount

@@ -314,15 +314,11 @@ func (uc *UserController) DisplayCart(c *gin.Context) {
 		return
 	}
 
-	cartItems, _, totalAmount, _, _, err1 := uc.userService.CheckOutCartProcess(uint(userID))
-	if err1 != nil {
-		c.JSON(http.StatusConflict, gin.H{"error": err1.Error()})
+	cartItems, totalAmount, err := uc.userService.DisplayCart(uint(userID))
+	if err != nil {
+		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
-	for _, a := range *cartItems {
-		fmt.Println("\ncartitems\n", a)
-	}
-	fmt.Println(cartItems)
 
 	response := gin.H{
 		"message":     "Cart",
