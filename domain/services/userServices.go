@@ -25,7 +25,7 @@ type UserService interface {
 	UserOtpValidation(UserLoginRequst *entity.UserLoginWithOtp) (*entity.User, error)
 	UserProfile(userId uint) (*deliverymodels.ViewUserProfile, *[]deliverymodels.ViewAddressForUser, error)
 
-	AddItemToCart(productId, userId, quantity, sizeId uint) error
+	AddItemToCart(productSlug string, userId, quantity, sizeId uint) error
 	RemoveCartItem(userId, productItemId, quantity uint) error
 	CheckOutCartProcess(userId uint) (*[]deliverymodels.ViewCartDetail, *[]deliverymodels.ViewAddressForUser,
 		float64, float64, *[]deliverymodels.Coupon, error)
@@ -274,8 +274,13 @@ func (s *userService) UserOtpValidation(userLoginRequest *entity.UserLoginWithOt
 
 }
 
-func (s *userService) AddItemToCart(productId, userId, quantity, sizeId uint) error {
-	productDetails, err := s.productRepo.ProductItemGetByProductIdAndSizeId(productId, sizeId)
+func (s *userService) AddItemToCart(productSlug string, userId, quantity, sizeId uint) error {
+	product, err := s.productRepo.ProductGetBySlug(productSlug)
+	if err != nil {
+		return err
+	}
+
+	productDetails, err := s.productRepo.ProductItemGetByProductIdAndSizeId(product.ID, sizeId)
 	if err != nil {
 		return err
 	}
@@ -586,13 +591,13 @@ func (s *userService) CheckOutCart(addressID, userID, paymentTypeID uint, coupon
 		return nil, nil, err
 	}
 
-	fetchPayment, err := s.paymentRepo.FindPaymentById(paymentCreated.ID)
+	_, err = s.paymentRepo.FindPaymentById(paymentCreated.ID)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var paytype string
-	if fetchPayment.PaymentTypeId == 1 {
+	if paymentTypeID == 1 {
 		paytype = "Cash on Delivery"
 	} else {
 		paytype = "Razor Pay"

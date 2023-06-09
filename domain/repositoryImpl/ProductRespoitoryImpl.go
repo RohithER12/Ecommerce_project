@@ -24,6 +24,18 @@ func (pr *ProductRepositoryImpl) CreateProduct(product *entity.Product) error {
 	return nil
 }
 
+func (pr *ProductRepositoryImpl) ProductGetBySlug(slag string) (*entity.Product, error) {
+	product := &entity.Product{}
+	if err := pr.db.First(product, slag).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("product not found")
+		}
+		return nil, errors.Wrap(err, "failed to get product by slag")
+	}
+	return product, nil
+
+}
+
 func (pr *ProductRepositoryImpl) ProductGetByID(id uint) (*entity.Product, error) {
 	product := &entity.Product{}
 	if err := pr.db.First(product, id).Error; err != nil {
@@ -108,6 +120,17 @@ func (pr *ProductRepositoryImpl) CreateProductItem(productItem *entity.ProductDe
 func (pr *ProductRepositoryImpl) ProductItemGetByID(id uint) (*entity.ProductDetails, error) {
 	product := &entity.ProductDetails{}
 	if err := pr.db.First(product, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("product item not found")
+		}
+		return nil, errors.Wrap(err, "failed to get product item by ID")
+	}
+	return product, nil
+}
+
+func (pr *ProductRepositoryImpl) ProductItemGetBySlug(slug string) (*entity.ProductDetails, error) {
+	product := &entity.ProductDetails{}
+	if err := pr.db.First(product, slug).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("product item not found")
 		}

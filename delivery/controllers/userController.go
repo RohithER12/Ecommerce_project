@@ -6,7 +6,6 @@ import (
 	"70_Off/domain/auth"
 	"70_Off/domain/entity"
 	"70_Off/domain/services"
-	"fmt"
 	"strconv"
 
 	"net/http"
@@ -265,12 +264,13 @@ func (uc *UserController) AddCartItem(c *gin.Context) {
 		return
 	}
 
-	productID, err := strconv.Atoi(c.Param("productID"))
-	if err != nil {
-		fmt.Println("\n", productID)
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid productID"})
-		return
-	}
+	productSlug := c.Param("productID")
+
+	// productID, err := strconv.Atoi(c.Param("productID"))
+	// if err != nil {
+	// 	c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid productID"})
+	// 	return
+	// }
 
 	sizeID, err := strconv.Atoi(c.Param("sizeID"))
 	if err != nil {
@@ -284,7 +284,7 @@ func (uc *UserController) AddCartItem(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid quantity"})
 		return
 	}
-	err1 := uc.userService.AddItemToCart(uint(productID), uint(userID), uint(quantity), uint(sizeID))
+	err1 := uc.userService.AddItemToCart(productSlug, uint(userID), uint(quantity), uint(sizeID))
 	if err1 != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
@@ -446,11 +446,6 @@ func (uc *UserController) PaymentSelection(c *gin.Context) {
 	}
 
 	coupon := c.DefaultQuery("coupon", "")
-	// coupon, err := strconv.Atoi(couponID)
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid coupon"})
-	// 	return
-	// }
 
 	paymentTypeID, err := strconv.Atoi(c.Param("paymentTypeID"))
 	if err != nil {

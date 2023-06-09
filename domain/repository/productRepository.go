@@ -15,6 +15,7 @@ type Product interface {
 	ProductListPaginated(offset, limit int) ([]*deliverymodels.ViewProductDetail, int, error)
 	GetProductsByBrandID(brandID uint, page int, limit int) ([]entity.Product, error)
 	SearchProductByName(input string, page, limit int) ([]*entity.Product, error)
+	ProductGetBySlug(slug string) (*entity.Product, error)
 
 	CreateProductItem(product *entity.ProductDetails) error
 	ProductItemGetByID(id uint) (*entity.ProductDetails, error)
@@ -22,4 +23,5 @@ type Product interface {
 	ProductItemUpdate(product *entity.ProductDetails) error
 	ProductItemDelete(product *entity.ProductDetails) error
 	GetProductDetailsByProductID(productID uint) ([]*entity.ProductDetails, error)
+	ProdutItemGetBySlug(slug string) (*entity.ProductDetails, error)
 }
