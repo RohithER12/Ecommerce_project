@@ -244,7 +244,7 @@ func (uc *UserController) AddAddress(c *gin.Context) {
 //	@Description	User Can Add Product to Cart
 //	@Tags			user
 //
-//	@param			product	path		string	true	"Product(required)"
+//	@param			product		path		string	true	"Product(required)"
 //	@param			quantity	path		string	true	"quantity(required)"
 //	@param			sizeID		path		string	true	"sizeID(required)"
 //

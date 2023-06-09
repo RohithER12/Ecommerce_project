@@ -496,9 +496,9 @@ paths:
     post:
       description: User Can Add Product to Cart
       parameters:
-      - description: ProductID(required)
+      - description: Product(required)
         in: path
-        name: productID
+        name: product
         required: true
         type: string
       - description: quantity(required)
