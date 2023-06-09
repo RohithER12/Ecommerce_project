@@ -23,5 +23,5 @@ type Product interface {
 	ProductItemUpdate(product *entity.ProductDetails) error
 	ProductItemDelete(product *entity.ProductDetails) error
 	GetProductDetailsByProductID(productID uint) ([]*entity.ProductDetails, error)
-	ProdutItemGetBySlug(slug string) (*entity.ProductDetails, error)
+	// ProdutItemGetBySlug(slug string) (*entity.ProductDetails, error)
 }

@@ -128,16 +128,16 @@ func (pr *ProductRepositoryImpl) ProductItemGetByID(id uint) (*entity.ProductDet
 	return product, nil
 }
 
-func (pr *ProductRepositoryImpl) ProductItemGetBySlug(slug string) (*entity.ProductDetails, error) {
-	product := &entity.ProductDetails{}
-	if err := pr.db.First(product, slug).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("product item not found")
-		}
-		return nil, errors.Wrap(err, "failed to get product item by ID")
-	}
-	return product, nil
-}
+// func (pr *ProductRepositoryImpl) ProductItemGetBySlug(slug string) (*entity.ProductDetails, error) {
+// 	product := &entity.ProductDetails{}
+// 	if err := pr.db.First(product, slug).Error; err != nil {
+// 		if errors.Is(err, gorm.ErrRecordNotFound) {
+// 			return nil, errors.New("product item not found")
+// 		}
+// 		return nil, errors.Wrap(err, "failed to get product item by ID")
+// 	}
+// 	return product, nil
+// }
 
 func (pr *ProductRepositoryImpl) ProductItemGetByProductIdAndSizeId(productId, sizeId uint) (*entity.ProductDetails, error) {
 	product := &entity.ProductDetails{}
