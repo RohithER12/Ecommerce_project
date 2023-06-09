@@ -150,8 +150,9 @@ func (ps *ProductService) ProductCreate(adminId uint, input *deliverymodels.AddP
 	if err != nil {
 		return err
 	}
-	fmt.Println("\nunuque slug\n", name)
 	slug := slug.Make(input.Name)
+	fmt.Println("\nunuque slug\n", name, "\norginal\n", slug)
+
 	var product = entity.Product{
 		Name:        input.Name,
 		Description: input.Description,
