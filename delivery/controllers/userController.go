@@ -118,7 +118,7 @@ func (uc *UserController) UserLogin(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("token", token, 3600, "/", "localhost", false, true)
+	c.SetCookie("token", token, 3600, "/", "70off.online", true, true)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Logged in successfully"})
 }
@@ -195,7 +195,7 @@ func (uc *UserController) UserLoginWithOtpValidation(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("token", token, 3600, "/", "localhost", false, true)
+	c.SetCookie("token", token, 3600, "/", "70off.online", false, true)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Login successfully"})
 }
