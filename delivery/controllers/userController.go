@@ -228,7 +228,6 @@ func (uc *UserController) AddAddress(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println("\nuserid\n", userID)
 	err1 := uc.userService.AddUserAddress(&address, uint(userID))
 	if err1 != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
