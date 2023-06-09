@@ -8,7 +8,6 @@ import (
 	"70_Off/domain/repositoryImpl"
 	"70_Off/domain/services"
 	"70_Off/infrastructure"
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -40,7 +39,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating database connection:", err)
 	}
-	fmt.Println("---")
 
 	userRepo := repositoryImpl.NewUserRepositoryImpl(db)
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(db)

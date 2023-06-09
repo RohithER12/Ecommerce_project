@@ -24,16 +24,15 @@ func (pr *ProductRepositoryImpl) CreateProduct(product *entity.Product) error {
 	return nil
 }
 
-func (pr *ProductRepositoryImpl) ProductGetBySlug(slag string) (*entity.Product, error) {
+func (pr *ProductRepositoryImpl) ProductGetBySlug(slug string) (*entity.Product, error) {
 	product := &entity.Product{}
-	if err := pr.db.First(product, slag).Error; err != nil {
+	if err := pr.db.Where("slug = ?", slug).First(product).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("product not found")
 		}
-		return nil, errors.Wrap(err, "failed to get product by slag")
+		return nil, errors.Wrap(err, "failed to get product by slug")
 	}
 	return product, nil
-
 }
 
 func (pr *ProductRepositoryImpl) ProductGetByID(id uint) (*entity.Product, error) {
