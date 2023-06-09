@@ -319,6 +319,9 @@ func (uc *UserController) DisplayCart(c *gin.Context) {
 		c.JSON(http.StatusConflict, gin.H{"error": err1.Error()})
 		return
 	}
+	for _, a := range *cartItems {
+		fmt.Println("\ncartitems\n", a)
+	}
 
 	response := gin.H{
 		"message":     "Cart",
