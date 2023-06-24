@@ -93,7 +93,7 @@ func TestGetByID(t *testing.T) {
 		t.Errorf("Error retrieving admin: %s", err.Error())
 	}
 	fmt.Printf("Actual admin: %+v\n", admin)
-	// Assert that the expected admin is returned
+
 	assert.Equal(t, expectedAdmin, admin)
 
 	_, err = adminRepo.GetByID(0)
