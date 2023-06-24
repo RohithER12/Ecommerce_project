@@ -88,12 +88,6 @@ func LoadConfig() (*Config, error) {
 		},
 	}
 
-	fmt.Println(
-		"\nenv data\n", config.DB,
-		"\n AccountSID\n", config.Twilio.AccountSID,
-		"\n AuthToken\n", config.Twilio.AuthToken,
-		"\n AuthToken\n", config.Server,
-	)
 	// Generate secret key or retrieve it from an environment variable
 	secretKey := os.Getenv("JWT_SECRET")
 	if secretKey == "" {
@@ -117,9 +111,6 @@ func GetJWTConfig() string {
 }
 
 func init() {
-	// config.Twilio.AccountSID = os.Getenv("TWILIO_ACCOUNT_SID")
-	// config.Twilio.AuthToken = os.Getenv("TWILIO_AUTH_TOKEN")
-	// config.Twilio.VerifyServiceSID = os.Getenv("TWILIO_VERIFY_SERVICE_SID")
 
 	client = twilio.NewRestClientWithParams(twilio.ClientParams{
 		Username: config.Twilio.AccountSID,

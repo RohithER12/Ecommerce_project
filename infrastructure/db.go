@@ -16,7 +16,6 @@ type Database struct {
 func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
 		cfg.DB.Host, cfg.DB.User, cfg.DB.Password, cfg.DB.Name, cfg.DB.Port)
-	fmt.Println("\ndsnnnn\n", dsn)
 
 	if cfg.DB.Host == "" || cfg.DB.User == "" || cfg.DB.Password == "" || cfg.DB.Name == "" || cfg.DB.Port == "" {
 		return nil, fmt.Errorf("missing database configuration values")
