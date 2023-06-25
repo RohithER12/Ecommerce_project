@@ -15,13 +15,28 @@ func NewUserRepositoryImpl(db *gorm.DB) *UserRepositoryImpl {
 	return &UserRepositoryImpl{db}
 }
 
-func (repo *UserRepositoryImpl) Create(users *entity.User) error {
-	result := repo.db.Create(&users)
+func (repo *UserRepositoryImpl) Create(user *entity.User) error {
+	query := `INSERT INTO users (first_name, last_name, email, phone_number, username, password, block, verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	result := repo.db.Exec(query, user.FirstName, user.LastName, user.Email, user.PhoneNumber, user.Username, user.Password, user.Block, user.Verified)
+
 	if result.Error != nil {
 		return errors.New("failed to create user")
 	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("no rows were affected")
+	}
+
 	return nil
 }
+
+// func (repo *UserRepositoryImpl) Create(users *entity.User) error {
+// 	result := repo.db.Create(&users)
+// 	if result.Error != nil {
+// 		return errors.New("failed to create user")
+// 	}
+// 	return nil
+// }
 
 func (repo *UserRepositoryImpl) GetByID(id uint) (*entity.User, error) {
 	var user entity.User

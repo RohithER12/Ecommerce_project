@@ -26,7 +26,7 @@ func (r *CartRepo) FindCartByID(id uint) (*entity.Cart, error) {
 	var cart entity.Cart
 	result := r.db.First(&cart, id)
 	if result.Error != nil {
-		return nil, errors.New("Empty Cart")
+		return nil, errors.New("empty Cart")
 	}
 	return &cart, nil
 }
