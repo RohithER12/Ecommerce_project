@@ -73,7 +73,8 @@ func TestGetByID(t *testing.T) {
         Password:    "password",
     }
 
-    mock.ExpectQuery("^SELECT (.+) FROM admins WHERE id = \\$1$").
+    queryPattern := fmt.Sprintf("^SELECT (.+) FROM admins WHERE id = %d$", expectedID)
+    mock.ExpectQuery(regexp.QuoteMeta(queryPattern)).
         WithArgs(expectedID).
         WillReturnRows(mock.NewRows([]string{"name", "email", "phonenumber", "password"}).
             AddRow(expectedAdmin.Name, expectedAdmin.Email, expectedAdmin.PhoneNumber, expectedAdmin.Password))
