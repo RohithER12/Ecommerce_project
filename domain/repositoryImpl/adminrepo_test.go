@@ -60,54 +60,47 @@ func TestCreateAdmin(t *testing.T) {
 }
 
 func TestGetByID(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("Failed to set up mock database: %s", err.Error())
-	}
-	defer db.Close()
+    gormDB, mock := setupTestDB(t)
+    defer teardownTestDB(gormDB, mock)
 
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to initialize GORM database: %s", err.Error())
-	}
+    adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
 
-	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
+    expectedID := uint(1)
+    expectedAdmin := &entity.Admin{
+        Name:        "John Doe",
+        Email:       "john@example.com",
+        PhoneNumber: "1234567890",
+        Password:    "password",
+    }
 
-	expectedID := uint(1)
-	expectedAdmin := &entity.Admin{
-		Name:        "John Doe",
-		Email:       "john@example.com",
-		PhoneNumber: "1234567890",
-		Password:    "password",
-	}
+    mock.ExpectQuery("^SELECT (.+) FROM admins WHERE id = \\$1$").
+        WithArgs(expectedID).
+        WillReturnRows(mock.NewRows([]string{"name", "email", "phonenumber", "password"}).
+            AddRow(expectedAdmin.Name, expectedAdmin.Email, expectedAdmin.PhoneNumber, expectedAdmin.Password))
 
-	mock.ExpectQuery("^SELECT (.+) FROM admins WHERE id = \\$1$").
-		WithArgs(expectedID).
-		WillReturnRows(mock.NewRows([]string{"name", "email", "phonenumber", "password"}).
-			AddRow(expectedAdmin.Name, expectedAdmin.Email, expectedAdmin.PhoneNumber, expectedAdmin.Password))
+    admin, err := adminRepo.GetByID(expectedID)
+    if err != nil {
+        t.Errorf("Error retrieving admin: %s", err.Error())
+    }
+    fmt.Printf("Actual admin: %+v\n", admin)
 
-	admin, err := adminRepo.GetByID(expectedID)
-	if err != nil {
-		t.Errorf("Error retrieving admin: %s", err.Error())
-	}
-	fmt.Printf("Actual admin: %+v\n", admin)
+    assert.Equal(t, expectedAdmin, admin)
 
-	assert.Equal(t, expectedAdmin, admin)
+    // Additional fix: Ensure that passing 0 as ID raises an error
+    _, err = adminRepo.GetByID(0)
+    if err == nil {
+        t.Error("Expected error when passing nil ID, but got no error")
+    } else {
+        fmt.Printf("Expected error: %s\n", err.Error())
+    }
 
-	_, err = adminRepo.GetByID(0)
-	if err == nil {
-		t.Error("Expected error when passing nil ID, but got no error")
-	} else {
-		fmt.Printf("Expected error: %s\n", err.Error())
-	}
-	// Assert that all expectations were met
-	err = mock.ExpectationsWereMet()
-	if err != nil {
-		t.Errorf("Unfulfilled expectations: %s", err.Error())
-	}
+    // Assert that all expectations were met
+    err = mock.ExpectationsWereMet()
+    if err != nil {
+        t.Errorf("Unfulfilled expectations: %s", err.Error())
+    }
 }
+
 
 func TestGetByEmail(t *testing.T) {
 	email := "john@example.com"
