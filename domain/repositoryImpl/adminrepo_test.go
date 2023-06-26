@@ -60,18 +60,8 @@ func TestCreateAdmin(t *testing.T) {
 }
 
 func TestGetByID(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("Failed to set up mock database: %s", err.Error())
-	}
-	defer db.Close()
-
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to initialize GORM database: %s", err.Error())
-	}
+	gormDB, mock := setupTestDB(t)
+	defer teardownTestDB(gormDB, mock)
 
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
 
