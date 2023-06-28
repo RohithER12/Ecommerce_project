@@ -60,18 +60,8 @@ func TestCreateAdmin(t *testing.T) {
 }
 
 func TestGetByID(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("Failed to set up mock database: %s", err.Error())
-	}
-	defer db.Close()
-
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to initialize GORM database: %s", err.Error())
-	}
+	gormDB, mock := setupTestDB(t)
+	defer teardownTestDB(gormDB, mock)
 
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
 
@@ -110,25 +100,15 @@ func TestGetByID(t *testing.T) {
 }
 
 func TestGetByEmail(t *testing.T) {
+	gormDB, mock := setupTestDB(t)
+	defer teardownTestDB(gormDB, mock)
+
 	email := "john@example.com"
 	expectedAdmin := &entity.Admin{
 		Name:        "John Doe",
 		Email:       email,
 		PhoneNumber: "1234567890",
 		Password:    "password",
-	}
-
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("Failed to set up mock database: %s", err.Error())
-	}
-	defer db.Close()
-
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to initialize GORM database: %s", err.Error())
 	}
 
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
@@ -158,18 +138,8 @@ func TestGetByEmail(t *testing.T) {
 }
 
 func TestGetByPhoneNumber(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("Failed to set up mock database: %s", err.Error())
-	}
-	defer db.Close()
-
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to initialize GORM database: %s", err.Error())
-	}
+	gormDB, mock := setupTestDB(t)
+	defer teardownTestDB(gormDB, mock)
 
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
 
@@ -216,7 +186,6 @@ func TestUpdateAdmin(t *testing.T) {
 		Model: gorm.Model{ID: 1},
 		Name:  "John Doe",
 		Email: "john@example.com",
-		// ...
 	}
 
 	query := regexp.QuoteMeta("UPDATE admins SET name = $1, email = $2, phone_number = $3, password = $4 WHERE id = $5")

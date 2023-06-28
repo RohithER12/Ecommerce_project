@@ -47,11 +47,11 @@ func (s *adminService) Create(admin *deliverymodels.AdminSignupInputs) error {
 	phoneNumber := admin.PhoneNumber
 
 	if _, err := s.adminRepo.GetByEmail(email); err == nil {
-		return errors.New("Email already exists")
+		return errors.New("email already exists")
 	}
 
 	if _, err := s.adminRepo.GetByPhoneNumber(phoneNumber); err == nil {
-		return errors.New("PhoneNumber already exists")
+		return errors.New("phoneNumber already exists")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(admin.Password), bcrypt.DefaultCost)
@@ -80,11 +80,11 @@ func (s *adminService) AdminValidateLogin(adminLoginInput *deliverymodels.Admion
 
 	admin, err := s.adminRepo.GetByEmail(email)
 	if err != nil {
-		return nil, errors.New("Invalid credentials")
+		return nil, errors.New("invalid credentials")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(password)); err != nil {
-		return nil, errors.New("Invalid credentials")
+		return nil, errors.New("invalid credentials")
 	}
 
 	return admin, nil
@@ -217,9 +217,15 @@ func (s *adminService) UpdatingReturnOrderStatus(orderId uint) error {
 	orderID := orderUpdate.OrderID
 
 	getOrder, err := s.orderRepo.FindOrderById(orderID)
+	if err != nil {
+		return err
+	}
 	userId := getOrder.UserID
 
 	err = s.walletRepo.DepositToWallet(userId, orderUpdate.Price)
+	if err != nil {
+		return err
+	}
 	return nil
 
 }
