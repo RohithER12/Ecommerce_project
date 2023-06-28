@@ -88,6 +88,9 @@ func (repo *UserRepositoryImpl) GetByEmail(email string) (*entity.User, error) {
 		return nil, err
 	}
 	defer rows.Close()
+	if !rows.Next() {
+		return nil, errors.New("email not found")
+	}
 	for rows.Next() {
 		var firstName, lastName, email, phoneNumber, username, password string
 		var block, verified bool
@@ -118,6 +121,9 @@ func (repo *UserRepositoryImpl) GetUserByUserName(username string) (*entity.User
 		return nil, err
 	}
 	defer rows.Close()
+	if !rows.Next() {
+		return nil, errors.New("email not found")
+	}
 	for rows.Next() {
 		var firstName, lastName, email, phoneNumber, username, password string
 		var block, verified bool
@@ -147,6 +153,9 @@ func (repo *UserRepositoryImpl) GetByPhoneNumber(phoneNumber string) (*entity.Us
 	}
 
 	defer rows.Close()
+	if !rows.Next() {
+		return nil, errors.New("email not found")
+	}
 	for rows.Next() {
 		var firstName, lastName, email, phoneNumber, username, password string
 		var block, verified bool
