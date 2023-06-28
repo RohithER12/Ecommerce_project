@@ -129,15 +129,15 @@ func (s *userService) CreateUsers(user *deliverymodels.User) (string, error) {
 	phoneNumber := user.PhoneNumber
 
 	if _, err := s.userRepo.GetByEmail(email); err == nil {
-		return "", errors.New("Email already exists")
+		return "", errors.New("email already exists")
 	}
 
 	if _, err := s.userRepo.GetUserByUserName(username); err == nil {
-		return "", errors.New("Username already exists")
+		return "", errors.New("username already exists")
 	}
 
 	if _, err := s.userRepo.GetByPhoneNumber(phoneNumber); err == nil {
-		return "", errors.New("PhoneNumber already exists")
+		return "", errors.New("phoneNumber already exists")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
@@ -159,14 +159,14 @@ func (s *userService) CreateUsers(user *deliverymodels.User) (string, error) {
 	}
 	key, err2 := helpers.SendOtp(user.PhoneNumber)
 	if err2 != nil {
-		return "", errors.New("Otp sending failed")
+		return "", errors.New("otp sending failed")
 	}
 	otpdata := entity.OtpValidation{
 		Key: key, PhoneNumber: phoneNumber,
 	}
 	otpdataCreated, err3 := s.otpValidationRepo.Create(&otpdata)
 	if err3 != nil {
-		return "", errors.New("Otp sending failed")
+		return "", errors.New("otp sending failed")
 	}
 
 	return otpdataCreated.Key, nil
@@ -202,19 +202,19 @@ func (s *userService) UserValidateLogin(userLoginRequest *deliverymodels.UserLog
 
 	user, err := s.userRepo.GetUserByUserName(username)
 	if err != nil {
-		return nil, errors.New("Invalid credentials")
+		return nil, errors.New("invalid credentials")
 	}
 
-	if user.Block == true {
-		return nil, errors.New("User Blocked")
+	if user.Block {
+		return nil, errors.New("user Blocked")
 	}
 
-	if user.Verified != true {
-		return nil, errors.New("Can't login, User need to verify")
+	if !user.Verified {
+		return nil, errors.New("can't login, User need to verify")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return nil, errors.New("Invalid credentials")
+		return nil, errors.New("invalid credentials")
 	}
 
 	return user, nil
@@ -225,23 +225,23 @@ func (s *userService) UserOtpSendRequst(userLoginRequest *entity.UserLoginWithOt
 	phoneNumber := userLoginRequest.PhoneNumber
 	user, err1 := s.userRepo.GetByPhoneNumber(phoneNumber)
 	if err1 != nil {
-		return "", errors.New("Invalid credentials")
+		return "", errors.New("invalid credentials")
 	}
 
-	if user.Block == true {
-		return "", errors.New("User Blocked")
+	if user.Block {
+		return "", errors.New("user Blocked")
 	}
 
 	key, err2 := helpers.SendOtp(user.PhoneNumber)
 	if err2 != nil {
-		return "", errors.New("Otp sending failed")
+		return "", errors.New("otp sending failed")
 	}
 	otpdata := entity.OtpValidation{
 		Key: key, PhoneNumber: phoneNumber,
 	}
 	otpdataCreated, err3 := s.otpValidationRepo.Create(&otpdata)
 	if err3 != nil {
-		return "", errors.New("Otp sending failed")
+		return "", errors.New("otp sending failed")
 	}
 	return otpdataCreated.Key, nil
 
@@ -250,20 +250,20 @@ func (s *userService) UserOtpSendRequst(userLoginRequest *entity.UserLoginWithOt
 func (s *userService) UserOtpValidation(userLoginRequest *entity.UserLoginWithOtp) (*entity.User, error) {
 	userOtpData, err1 := s.otpValidationRepo.FindByKey(userLoginRequest.Key)
 	if err1 != nil {
-		return nil, errors.New("Invalid key")
+		return nil, errors.New("invalid key")
 	}
 	phoneNumber := "+91" + userOtpData.PhoneNumber
 	otp := userLoginRequest.Otp
 
 	err2 := helpers.CheckOtp(phoneNumber, otp)
 	if err2 != nil {
-		return nil, errors.New("Otp validation failed")
+		return nil, errors.New("otp validation failed")
 	}
 	user, err := s.userRepo.GetByPhoneNumber(userOtpData.PhoneNumber)
 	if err != nil {
-		return nil, errors.New("User PhoneNumber Does'nt match with dataBase")
+		return nil, errors.New("user PhoneNumber Does'nt match with dataBase")
 	}
-	if user.Verified != true {
+	if !user.Verified {
 		user.Verified = true
 		err3 := s.UpdateUser(user)
 		if err3 != nil {
@@ -285,7 +285,7 @@ func (s *userService) AddItemToCart(productSlug string, userId, quantity, sizeId
 		return err
 	}
 
-	cart, err := s.cartRepo.FindCartByUserID(userId)
+	cart, _ := s.cartRepo.FindCartByUserID(userId)
 	if cart == nil {
 		createCart := entity.Cart{
 			UserID:          userId,
@@ -456,7 +456,7 @@ func (s *userService) CheckOutCart(addressID, userID, paymentTypeID uint, coupon
 	if walletAmt > 0 {
 		err := s.walletRepo.WithdrawFromWallet(userID, walletAmt)
 		if err != nil {
-			return nil, nil, errors.New("Can't withdrow from wallet")
+			return nil, nil, errors.New("can't withdrow from wallet")
 		}
 
 	}
@@ -621,7 +621,7 @@ func (s *userService) RazorpayCheckOut(addressId, userId, paymentTypeID uint, co
 	if walleAmt > 0 {
 		err := s.walletRepo.WithdrawFromWallet(userId, walleAmt)
 		if err != nil {
-			return 0, errors.New("Can't withdrow from wallet")
+			return 0, errors.New("can't withdrow from wallet")
 		}
 	} else {
 		walleAmt = 0
@@ -677,7 +677,7 @@ func (s *userService) ExecutePurchaseRazorPay(userId, addressId uint) (string, u
 	}
 	body, err := client.Order.Create(data, nil)
 	if err != nil {
-		return "", 0, errors.New("Payment not initiated")
+		return "", 0, errors.New("payment not initiated")
 	}
 	razorId, _ := body["id"].(string)
 
@@ -699,7 +699,7 @@ func (s *userService) ExecuteRazorPaymentVerification(Signature, razorId, paymen
 
 	sha := hex.EncodeToString(h.Sum(nil))
 	if subtle.ConstantTimeCompare([]byte(sha), []byte(Signature)) != 1 {
-		return errors.New("Payment failed")
+		return errors.New("payment failed")
 	}
 	return nil
 }
@@ -721,7 +721,7 @@ func (s *userService) CancelOrderByUser(orderItemId uint) error {
 		return err
 	}
 	if orderItem.Status != "order placed " && orderItem.Status != "order confirmed" {
-		return errors.New("Canecelation Time Exeeded")
+		return errors.New("canecelation Time Exeeded")
 	}
 	order, err := s.orderRepo.FindOrderById(orderItem.OrderID)
 	if err != nil {
@@ -805,7 +805,7 @@ func (s *userService) OrderReturn(orderItemId uint) error {
 	}
 
 	if order.Status != "Delivered" {
-		return errors.New("Please check order id")
+		return errors.New("please check order id")
 	}
 	order.Status = "Returned"
 	_, err = s.orderRepo.UpdateOrderItem(order)
