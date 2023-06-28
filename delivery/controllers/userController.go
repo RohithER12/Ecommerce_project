@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"70_Off/delivery/auth"
 	deliverymodels "70_Off/delivery/deliveryModels"
 	"70_Off/delivery/helpers"
-	"70_Off/domain/auth"
-	"70_Off/domain/entity"
-	"70_Off/domain/services"
+	"70_Off/entity"
+	"70_Off/services"
 	"strconv"
 
 	"net/http"

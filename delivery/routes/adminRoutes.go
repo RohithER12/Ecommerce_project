@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"70_Off/config"
+	"70_Off/delivery/auth"
 	"70_Off/delivery/controllers"
-	"70_Off/domain/auth"
+	"70_Off/infrastructure/config"
 
 	"github.com/gin-gonic/gin"
 )
