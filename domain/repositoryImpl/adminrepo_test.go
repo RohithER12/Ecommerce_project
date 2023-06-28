@@ -93,14 +93,12 @@ func TestGetByID(t *testing.T) {
 	} else {
 		fmt.Printf("Expected error: %s\n", err.Error())
 	}
-	// Assert that all expectations were met
 	err = mock.ExpectationsWereMet()
 	if err != nil {
 		t.Errorf("Unfulfilled expectations: %s", err.Error())
 	}
 
 }
-
 
 func TestGetByEmail(t *testing.T) {
 	gormDB, mock := setupTestDB(t)
