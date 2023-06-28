@@ -49,8 +49,8 @@ func TestAdminService_Create(t *testing.T) {
 
 	admin := &deliverymodels.AdminSignupInputs{
 		Name:        "John Doe",
-		Email:       "john@example.com",
-		PhoneNumber: "123456789",
+		Email:       "john@example2.com",
+		PhoneNumber: "1234567891",
 		Password:    "password",
 	}
 
@@ -63,7 +63,9 @@ func TestAdminService_Create(t *testing.T) {
 	}
 
 	mockRepos.adminRepo.EXPECT().GetByEmail(admin.Email).Return(nil, nil)
+
 	mockRepos.adminRepo.EXPECT().GetByPhoneNumber(admin.PhoneNumber).Return(nil, nil)
+
 	mockRepos.adminRepo.EXPECT().Create(expectedAdmin).Return(nil)
 
 	err := adminService.Create(admin)
