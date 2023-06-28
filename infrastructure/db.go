@@ -1,17 +1,17 @@
 package infrastructure
 
 import (
-	"70_Off/config"
-	"70_Off/domain/entity"
+	"70_Off/entity"
+	"70_Off/infrastructure/config"
 	"fmt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type Database struct {
-	gormDB *gorm.DB
-}
+// type Database struct {
+// 	gormDB *gorm.DB
+// }
 
 func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",

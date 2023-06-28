@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"70_Off/config"
+	"70_Off/infrastructure/config"
 
 	"github.com/twilio/twilio-go"
 	openapi "github.com/twilio/twilio-go/rest/verify/v2"

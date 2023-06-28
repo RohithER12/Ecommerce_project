@@ -1,13 +1,13 @@
 package main
 
 import (
-	"70_Off/config"
 	"70_Off/delivery/controllers"
 	"70_Off/delivery/routes"
 	_ "70_Off/docs"
-	"70_Off/domain/repositoryImpl"
-	"70_Off/domain/services"
 	"70_Off/infrastructure"
+	"70_Off/infrastructure/config"
+	"70_Off/repository/repositoryImpl"
+	"70_Off/services"
 	"log"
 
 	"github.com/gin-gonic/gin"
