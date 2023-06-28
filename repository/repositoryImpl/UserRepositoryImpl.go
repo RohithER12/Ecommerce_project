@@ -214,3 +214,5 @@ func (repo *UserRepositoryImpl) GetAddressById(id uint) (*entity.Address, error)
 	}
 	return &addresses, nil
 }
+
+// for testing
