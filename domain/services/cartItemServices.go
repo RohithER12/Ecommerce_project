@@ -17,11 +17,7 @@ type cartItemService struct {
 }
 
 func NewCartItemService(cartItemRepo repository.CartItemRepository) CartItemService {
-	err := &cartItemService{cartItemRepo: cartItemRepo}
-	if err != nil {
-		return err
-	}
-	return nil
+	return &cartItemService{cartItemRepo: cartItemRepo}
 }
 
 func (s *cartItemService) SaveCartItem(cartItem *entity.CartItem) (*entity.CartItem, error) {

@@ -60,69 +60,58 @@ func TestCreateAdmin(t *testing.T) {
 }
 
 func TestGetByID(t *testing.T) {
-    gormDB, mock := setupTestDB(t)
-    defer teardownTestDB(gormDB, mock)
 
-    adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
+	gormDB, mock := setupTestDB(t)
+	defer teardownTestDB(gormDB, mock)
 
-    expectedID := uint(1)
-    expectedAdmin := &entity.Admin{
-        Name:        "John Doe",
-        Email:       "john@example.com",
-        PhoneNumber: "1234567890",
-        Password:    "password",
-    }
+	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
 
-    queryPattern := fmt.Sprintf("^SELECT (.+) FROM admins WHERE id = %d$", expectedID)
-    mock.ExpectQuery(regexp.QuoteMeta(queryPattern)).
-        WithArgs(expectedID).
-        WillReturnRows(mock.NewRows([]string{"name", "email", "phonenumber", "password"}).
-            AddRow(expectedAdmin.Name, expectedAdmin.Email, expectedAdmin.PhoneNumber, expectedAdmin.Password))
+	expectedID := uint(1)
+	expectedAdmin := &entity.Admin{
+		Name:        "John Doe",
+		Email:       "john@example.com",
+		PhoneNumber: "1234567890",
+		Password:    "password",
+	}
 
-    admin, err := adminRepo.GetByID(expectedID)
-    if err != nil {
-        t.Errorf("Error retrieving admin: %s", err.Error())
-    }
-    fmt.Printf("Actual admin: %+v\n", admin)
+	mock.ExpectQuery("^SELECT (.+) FROM admins WHERE id = \\$1$").
+		WithArgs(expectedID).
+		WillReturnRows(mock.NewRows([]string{"name", "email", "phonenumber", "password"}).
+			AddRow(expectedAdmin.Name, expectedAdmin.Email, expectedAdmin.PhoneNumber, expectedAdmin.Password))
 
-    assert.Equal(t, expectedAdmin, admin)
+	admin, err := adminRepo.GetByID(expectedID)
+	if err != nil {
+		t.Errorf("Error retrieving admin: %s", err.Error())
+	}
+	fmt.Printf("Actual admin: %+v\n", admin)
 
-    // Additional fix: Ensure that passing 0 as ID raises an error
-    _, err = adminRepo.GetByID(0)
-    if err == nil {
-        t.Error("Expected error when passing nil ID, but got no error")
-    } else {
-        fmt.Printf("Expected error: %s\n", err.Error())
-    }
+	assert.Equal(t, expectedAdmin, admin)
 
-    // Assert that all expectations were met
-    err = mock.ExpectationsWereMet()
-    if err != nil {
-        t.Errorf("Unfulfilled expectations: %s", err.Error())
-    }
+	_, err = adminRepo.GetByID(0)
+	if err == nil {
+		t.Error("Expected error when passing nil ID, but got no error")
+	} else {
+		fmt.Printf("Expected error: %s\n", err.Error())
+	}
+	// Assert that all expectations were met
+	err = mock.ExpectationsWereMet()
+	if err != nil {
+		t.Errorf("Unfulfilled expectations: %s", err.Error())
+	}
+
 }
 
 
 func TestGetByEmail(t *testing.T) {
+	gormDB, mock := setupTestDB(t)
+	defer teardownTestDB(gormDB, mock)
+
 	email := "john@example.com"
 	expectedAdmin := &entity.Admin{
 		Name:        "John Doe",
 		Email:       email,
 		PhoneNumber: "1234567890",
 		Password:    "password",
-	}
-
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("Failed to set up mock database: %s", err.Error())
-	}
-	defer db.Close()
-
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to initialize GORM database: %s", err.Error())
 	}
 
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
@@ -152,18 +141,8 @@ func TestGetByEmail(t *testing.T) {
 }
 
 func TestGetByPhoneNumber(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("Failed to set up mock database: %s", err.Error())
-	}
-	defer db.Close()
-
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to initialize GORM database: %s", err.Error())
-	}
+	gormDB, mock := setupTestDB(t)
+	defer teardownTestDB(gormDB, mock)
 
 	adminRepo := repositoryImpl.NewAdminRepositoryImpl(gormDB)
 
@@ -210,7 +189,6 @@ func TestUpdateAdmin(t *testing.T) {
 		Model: gorm.Model{ID: 1},
 		Name:  "John Doe",
 		Email: "john@example.com",
-		// ...
 	}
 
 	query := regexp.QuoteMeta("UPDATE admins SET name = $1, email = $2, phone_number = $3, password = $4 WHERE id = $5")
