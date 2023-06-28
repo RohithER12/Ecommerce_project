@@ -70,3 +70,60 @@ func TestAdminService_Create(t *testing.T) {
 
 	assert.Nil(t, err, nil)
 }
+
+func TestAdminService_CreateEmailAlreadyExist(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockRepos := NewMockRepositories(ctrl)
+
+	adminService := NewAdminService(
+		mockRepos.adminRepo,
+		mockRepos.userRepo,
+		mockRepos.inventoryRepo,
+		mockRepos.orderRepo,
+		mockRepos.walletRepo,
+		mockRepos.couponRepo,
+	)
+
+	admin := &deliverymodels.AdminSignupInputs{
+		Name:        "John Doe",
+		Email:       "john@example2.com",
+		PhoneNumber: "1234567891",
+		Password:    "password",
+	}
+	mockRepos.adminRepo.EXPECT().GetByEmail(admin.Email).Return(nil, nil)
+	mockRepos.adminRepo.EXPECT().Create(gomock.Any()).Return(errors.New("email already exists")).AnyTimes()
+
+	err := adminService.Create(admin)
+	assert.Error(t, err, "email already exists")
+}
+
+func TestAdminService_CreatePhoneNumberAlreadyExist(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockRepos := NewMockRepositories(ctrl)
+
+	adminService := NewAdminService(
+		mockRepos.adminRepo,
+		mockRepos.userRepo,
+		mockRepos.inventoryRepo,
+		mockRepos.orderRepo,
+		mockRepos.walletRepo,
+		mockRepos.couponRepo,
+	)
+
+	admin := &deliverymodels.AdminSignupInputs{
+		Name:        "John Doe",
+		Email:       "john@example2.com",
+		PhoneNumber: "1234567891",
+		Password:    "password",
+	}
+	mockRepos.adminRepo.EXPECT().GetByEmail(admin.Email).Return(nil, errors.New("invalid email"))
+	mockRepos.adminRepo.EXPECT().GetByPhoneNumber(admin.PhoneNumber).Return(nil, nil)
+	mockRepos.adminRepo.EXPECT().Create(gomock.Any()).Return(errors.New("phoneNumber already exists")).AnyTimes()
+
+	err := adminService.Create(admin)
+	assert.Error(t, err, "phoneNumber already exists")
+}
