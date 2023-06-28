@@ -60,6 +60,7 @@ func TestCreateAdmin(t *testing.T) {
 }
 
 func TestGetByID(t *testing.T) {
+
 	gormDB, mock := setupTestDB(t)
 	defer teardownTestDB(gormDB, mock)
 
@@ -97,7 +98,9 @@ func TestGetByID(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unfulfilled expectations: %s", err.Error())
 	}
+
 }
+
 
 func TestGetByEmail(t *testing.T) {
 	gormDB, mock := setupTestDB(t)
