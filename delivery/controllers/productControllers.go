@@ -2,7 +2,7 @@ package controllers
 
 import (
 	deliverymodels "70_Off/delivery/deliveryModels"
-	"70_Off/domain/services"
+	"70_Off/services"
 	"net/http"
 	"strconv"
 

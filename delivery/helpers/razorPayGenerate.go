@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"70_Off/config"
+	"70_Off/infrastructure/config"
 	"fmt"
 
 	"github.com/razorpay/razorpay-go"
