@@ -126,6 +126,10 @@ func (ac *AdminController) OrderReport(c *gin.Context) {
 		return
 	}
 	report, err := ac.adminService.OrderReport(uint(days))
+	if err != nil {
+		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message":                                  "Reports",
