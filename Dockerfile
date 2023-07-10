@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM alpine:3.18
+FROM alpine:3.17
 
 RUN apk add --no-cache ca-certificates
 
@@ -109,11 +109,3 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 1777 "$GOPATH"
 WORKDIR $GOPATH
-RUN apk update && apk add --no-cache git
-RUN mkdir /app
-ADD . /app
-WORKDIR /app
-
-RUN go mod download
-RUN go build -o main .
-CMD ["/app/main"]
