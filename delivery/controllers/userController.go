@@ -69,7 +69,7 @@ func (uc *UserController) UserSignUpVerification(c *gin.Context) {
 		return
 	}
 
-	if userOtpLoginRequest.ResendOtp == true {
+	if userOtpLoginRequest.ResendOtp {
 		key, err1 := uc.userService.UserOtpSendRequst(&userOtpLoginRequest)
 		if err1 != nil {
 			c.JSON(http.StatusConflict, gin.H{"error": err1.Error()})
@@ -172,7 +172,7 @@ func (uc *UserController) UserLoginWithOtpValidation(c *gin.Context) {
 		return
 	}
 
-	if userOtpLoginRequest.ResendOtp == true {
+	if userOtpLoginRequest.ResendOtp {
 		key, err1 := uc.userService.UserOtpSendRequst(&userOtpLoginRequest)
 		if err1 != nil {
 			c.JSON(http.StatusConflict, gin.H{"error": err1.Error()})
@@ -481,6 +481,10 @@ func (uc *UserController) PaymentSelection(c *gin.Context) {
 	} else {
 		PayableAmount, err := uc.userService.RazorpayCheckOut(uint(addressID), uint(userID),
 			uint(paymentTypeID), coupon, float64(walletAmt))
+		if err != nil {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
+		}
 
 		razorpayid, err := helpers.GenerateRazorpayOrder(uint(PayableAmount) * 100)
 		if err != nil {
@@ -701,7 +705,7 @@ func (uc *UserController) ResetPasswordUser(c *gin.Context) {
 		return
 	}
 
-	if userOtpLoginRequest.ResendOtp == true {
+	if userOtpLoginRequest.ResendOtp {
 		key, err1 := uc.userService.UserOtpSendRequst(&userOtpLoginRequest)
 		if err1 != nil {
 			c.JSON(http.StatusConflict, gin.H{"error": err1.Error()})
