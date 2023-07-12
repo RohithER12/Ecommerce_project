@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-values
+data:
+  expose-port: "8080"
+  db-host: postgres-service
+  db-port: "5432"

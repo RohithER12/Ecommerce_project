@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: rohither/70-off_online_ecom:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: EXPOSE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-values
+                  key: expose-port
+            - name: DB_USER
+              valueFrom: 
+                secretKeyRef:
+                  name: postgres-secret
+                  key: db-username
+            - name: POSTGRES_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: postgres-secret
+                  key: db-password
+            - name: DB_NAME
+              valueFrom: 
+                secretKeyRef:
+                  name: postgres-secret
+                  key: db-name
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-values
+                  key: db-host
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-values
+                  key: db-port
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  selector:
+    app: db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
