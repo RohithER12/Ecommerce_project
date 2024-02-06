@@ -72,3 +72,5 @@ func main() {
 
 	router.Run(":" + cfg.Server.Address)
 }
+
+//added new command
